@@ -1,0 +1,17 @@
+Rapid Development:
+
+Django follows the "Don't Repeat Yourself" (DRY) principle, enabling developers to build applications quickly by reusing code and minimizing redundancy.
+
+High-Level Abstraction:
+
+Django provides high-level abstractions for common web development tasks.
+Security Features:
+
+Django includes built-in security features such as protection against common web vulnerabilities, secure password handling, and protection against SQL injection and cross-site scripting (XSS) attacks.
+
+ORM (Object-Relational Mapping):
+
+Django's ORM simplifies database interactions by allowing developers to work with database models using Python code, reducing the need for direct SQL queries.
+
+
+

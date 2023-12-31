@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Bravo</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand"  style=" padding: 10px;" href="/">Bravo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>
+
+          </ul>
+         
+        </div>
+        {% if user.is_authenticated %}
+        
+        <div class="div mr-4" >
+            <!-- Content for authenticated users -->
+            <span class="p-5">Hello <a href="{% url 'profile' pk=request.user.id %}" style="text-decoration: none;">@{{request.user}}</a></span>
+            <a href="{% url 'logout' %}" class="btn btn-dark ml-5">Logout</a>
+        </div>
+    {% else %}
+        <div class="div mr-4">
+            <!-- Content for non-authenticated users -->
+            <a href="{% url 'login' %}" class="btn btn-dark ml-5">Login</a>
+        </div>
+    {% endif %}
+    
+      </div>
+   
+  </nav>
+
+      <style>
+          .discussion-section {
+   
+    
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+    
+        .user-info {
+            font: weight 400px;;
+            color: #333;
+            text-transform: capitalize;
+        }
+        body {
+          font-family: Arial, sans-serif;
+        }
+        .chat-container {
+          max-width: 600px;
+          margin: 20px auto;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          overflow: hidden;
+             
+      background: #141E30; 
+      background: -webkit-linear-gradient(to right, #243B55, #141E30); 
+      background: linear-gradient(to right, #243B55, #141E30);
+
+        }
+        .t{
+          background: #141E30;  
+      background: -webkit-linear-gradient(to right, #243B55, #141E30);  
+      background: linear-gradient(to right, #243B55, #141E30);
+        }
+        .chat-header {
+          background-color: #f8f9fa;
+          padding: 10px;
+          border-bottom: 1px solid #ccc;
+        }
+        .chat-messages {
+          padding: 10px;
+          overflow-y: scroll;
+          height: 450px;
+          
+        }
+        .file_history{
+          overflow-y: scroll;
+          height: 400px;
+          background: #141E30;  
+          background: -webkit-linear-gradient(to right, #243B55, #141E30); 
+          background: linear-gradient(to right, #243B55, #141E30);
+        }
+        .message {
+          margin-bottom: 10px;
+
+        }
+        .message .user {
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+        .message .text {
+          background-color: #f8f9fa;
+          padding: 8px;
+          border-radius: 5px;
+          max-width:fit-content;
+        }
+        .chat-input {
+          border-top: 1px solid #ccc;
+          padding: 10px;
+        }
+        .users{
+          text-transform: capitalize;
+          font-weight: 300;
+          color: #fff;
+          font-size: 15px;
+
+        }
+      </style>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha384-rB8m/ktUvjOTtF0aCqQ8q3ZfHbI6d/cr/ZYPa7VMTFIlkcXpOw+qDGM9J5tr5Szk" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+      <div class="container ">
+        <div class="row">
+
+        <a class="btn btn-dark t">Service name <strong>{{name}}  </strong>   &nbsp; &nbsp; &nbsp; &nbsp;Your Assistant <span style="color:#01eeff ;text-transform: capitalize;">{{creator}}</span></a>
+      
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="container chat-container">
+        
+            <div class="chat-messages" id ="chat" >
+              {% for message in messages %}
+              {% if message.host != request.user %}
+              <div class="message" >
+                <div class="users" >{{message.host}}</div>
+                <div class="text" >{{message.message}}</div>
+              </div>
+              {%else%}
+              <div class="message">
+                <div class="users" >{{message.host}}</div>
+                <div class="text text-wrap" >{{message.message}}</div>
+              </div>
+              {%endif%}
+              {%endfor%}
+             
+            </div>
+            <div class="chat-input">
+                    
+                <form id="form">
+                  <input type="text" class="form-control"  placeholder="Enter your message here" name="message"/>
+    
+                </form>
+    
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+       
+        <div class="mt-4">
+   <a class="btn btn-success" href="{% url 'upload_file' pk=room_id %}">Upload File</a>
+      </div>
+        <div class="file_history mt-5">
+          <p class="btn btn-light m-2  sticky-top" >Download File</p>
+          <div>
+            {% for file in room_file %}
+            <div class="p-2">
+            <span style="color: #01eeff; text-transform: capitalize;">{{file.sendby}} &nbsp; </span>   
+             <span style="color: #fff;"> {{file.file_name}} </span>  <a type="button" style="color: lightseagreen;" href="{% url 'download' file.id %}" data-mdb-ripple-init>
+                <i class="fas fa-download"></i></a> 
+            </div>
+            {% endfor %}
+          </div>
+        </div>  
+     
+        
+        </div>
+      </div>
+
+    
+
+
+   
+
+
+
+
+
+
+
+
+      <script>
+        var messageContainer = document.getElementById('chat');
+          messageContainer.scrollTop = messageContainer.scrollHeight;
+          var roomid = "{{ room_id }}";
+
+      let url = `ws://${window.location.host}/ws/socket-server/${roomid}/`;
+
+      const chatSocket = new WebSocket(url)
+
+      chatSocket.onmessage = function(e){
+          let data = JSON.parse(e.data)
+          console.log('Data:', data)
+
+          if(data.type==='chat'){
+            let messages = document.getElementById('chat')
+            messages.insertAdjacentHTML('beforeend',`   <div class="message" >
+        <div class="user"  style="text-transform: capitalize;
+          font-weight: 300;
+          color: #fff;
+          font-size: 15px;">${data.host}</div>
+        <div class="text" id="messages">${data.message}</div>
+      </div>`)
+          }
+          var messageContainer = document.getElementById('chat');
+          messageContainer.scrollTop = messageContainer.scrollHeight;
+          
+      }
+
+
+      let form=document.getElementById('form')
+
+      form.addEventListener('submit',(e)=>{
+        e.preventDefault()
+        let message=e.target.message.value
+        chatSocket.send(JSON.stringify({
+          'message':message,
+          'host':"{{user}}",
+          'creator':"{{creator}}",
+          'room_id':"{{room_id}}"
+        }))
+        form.reset()
+      })
+
+
+
+      </script>
+
+
+
+
+
+
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    -->
+  </body>
+</html>

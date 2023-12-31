@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>User Profile</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand"  style=" padding: 10px;" href="/">Bravo</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Dropdown
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              </li>
+
+            </ul>
+           
+          </div>
+          {% if user.is_authenticated %}
+          
+          <div class="div mr-4" >
+              <!-- Content for authenticated users -->
+              <span class="p-5">Hello <a href="{% url 'profile' pk=request.user.id %}" style="text-decoration: none;">@{{request.user}}</a></span>
+              <a href="{% url 'logout' %}" class="btn btn-dark ml-5">Logout</a>
+          </div>
+      {% else %}
+          <div class="div mr-4">
+              <!-- Content for non-authenticated users -->
+              <a href="{% url 'login' %}" class="btn btn-dark ml-5">Login</a>
+          </div>
+      {% endif %}
+      
+        </div>
+     
+    </nav>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <!-- User Profile Card -->
+            <div class="card">
+              {% if profile_picture %}
+                <img src="{{profile_picture}}" class="card-img-top" alt="{{profile_picture}}">
+              {% else %}
+                <img src="https://cdn.iconscout.com/icon/free/png-512/avatar-370-456322.png" class="card-img-top" alt="https://bootdey.com/img/Content/avatar/avatar7.png">
+              {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title text-center" style="text-transform: capitalize; font-size: 2rem;">{{username.username}}</h5>
+                    {% if expart %}
+                    <p class="card-text">{{expart}}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <!-- User Details -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">About Me</h5>
+                    <p class="card-text">
+                        {{bio}}
+                    </p>
+                 
+
+                    <h5 class="card-title">Contact Information</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item">Email: {{username.email}}</li>
+                        <li class="list-group-item">Phone: +1 123-456-7890</li>
+                        <li class="list-group-item">Address: 123 Main St, Cityville</li>
+                    </ul>
+                    {% if request.user == username %}
+                    <a class="card-text btn btn-outline-dark mt-2" href="{% url 'updateProfile' username.id %}">
+                      Edit your profile
+                    </a>
+                    {% endif %}
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if services %}
+<div class="container mt-5">
+    <button class="btn btn-dark mb-3">  {{username.username}}'s Banner</button>
+    <div class="row">
+
+
+      {% for service in services %}
+      <div class="col-6 col-lg-4">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title" style="text-transform: capitalize;">{{service.service_name}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Creator: <span style="text-transform: capitalize;"><a href="{% url 'profile' pk=service.creator.id %}">{{service.creator}}</a></span></h6>
+              <p class="card-text">{{service.description}}</p>
+              <a href="" class="card-link btn btn-outline-dark">See Details</a>
+              {% if request.user == service.creator %}
+              {% else %}
+           
+              <a href="{% url 'room' pk=service.id %}" class="card-link btn btn-outline-success">Go</a>
+              {% endif %}
+            </div>
+          </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+
+{% if request.user == username %}
+  <div class="container mt-5">
+    <button class="btn btn-success mb-3">  Your InBox</button>
+    <div class="row">
+
+
+      {% for room in your_room %}
+      <div class="col-6 col-lg-4">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title" style="text-transform: capitalize;">{{room.service.service_name}}</h5>
+              <!-- <h6 class="card-subtitle mb-2 text-muted">Creator: <span style="text-transform: capitalize;"><a href="{% url 'profile' pk=room.creator.id %}">{{room.creator}}</a></span></h6> -->
+              <h6 class="card-subtitle mb-2 text-muted">Message Sent by: <span style="text-transform: capitalize;"><a href="{% url 'profile' pk=room.client.id %}">{{room.client}}</a></span></h6>
+                
+              <p class="card-text">{{service.description}}</p>
+      
+              <a href="{% url 'viewRoom' pk=room.id %}" class="card-link btn btn-outline-success">See Message</a>
+            </div>
+          </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+
+{% if request.user == username %}
+{% if x %}
+  <div class="container mt-5">
+    <button class="btn btn-success mb-3">You Messaged Other Creator</button>
+    <div class="row">
+  
+
+      {% for room in x %}
+      <div class="col-6 col-lg-4 mt-3">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h6 class="card-subtitle mb-2 text-muted">Your messaging withk: <span style="text-transform: capitalize;"><a href="{% url 'profile' pk=room.creator.id %}">{{room.creator}}</a></span></h6>
+
+              <h5 class="card-title" style="text-transform: capitalize;">{{room.service.service_name}}</h5>
+              <a href="{% url 'viewRoom' pk=room.id %}" class="card-link btn btn-outline-success">Enter Your Room</a>
+            </div>
+          </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+{% endif %}
+
+<!-- Bootstrap JS and Popper.js (required for Bootstrap components) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>
